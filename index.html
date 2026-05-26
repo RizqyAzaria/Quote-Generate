@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Motivational Quotes - Neo Brutalism Style</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <style>
+    /* Neo Brutalism Style */
+    body {
+      background: #fffcf2;
+      font-family: 'Inter', Arial, sans-serif;
+      color: #16161d;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      margin-top: 3rem;
+      background: #fff;
+      border: 4px solid #16161d;
+      box-shadow: 10px 10px 0 #ffb703;
+      padding: 3rem 2.5rem;
+      border-radius: 18px;
+      max-width: 460px;
+      text-align: center;
+    }
+
+    .quote {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      color: #073b4c;
+      text-shadow: 1px 1px 0 #ffd166;
+    }
+
+    .author {
+      font-size: 1.1rem;
+      text-align: right;
+      color: #ef476f;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      border: 3px solid #073b4c;
+      background: #06d6a0;
+      color: #16161d;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 5px 5px 0 #ffd166;
+      transition: all 0.13s cubic-bezier(.25,.74,.31,.87);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn:active {
+      box-shadow: 1px 1px 0 #ffd166;
+      transform: translate(4px, 4px);
+      background: #118ab2;
+      color: #fff;
+    }
+
+    .heading {
+      font-size: 2.3rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      background: #ffd166;
+      color: #16161d;
+      padding: 0.4rem 2rem 0.6rem 2rem;
+      border: 4px solid #073b4c;
+      border-radius: 15px;
+      box-shadow: 6px 6px 0 #ef476f;
+      margin-bottom: 1.4rem;
+      display: inline-block;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 2rem 1rem;
+        max-width: 95vw;
+      }
+      .heading {
+        font-size: 1.2rem;
+        padding: 0.25rem 0.6rem;
+      }
+      .quote { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="heading">Motivational Quotes</h1>
+  <div class="container">
+    <div class="quote" id="quoteText"></div>
+    <div class="author" id="quoteAuthor"></div>
+    <button class="btn" onclick="showRandomQuote()">New Quote</button>
+  </div>
+  <script>
+    // Array of motivational quotes
+    const quotes = [
+      { quote: "The best way to get started is to quit talking and begin doing.", author: "Walt Disney" },
+      { quote: "Don’t let yesterday take up too much of today.", author: "Will Rogers" },
+      { quote: "It’s not whether you get knocked down, it’s whether you get up.", author: "Vince Lombardi" },
+      { quote: "The harder you work for something, the greater you’ll feel when you achieve it.", author: "Unknown" },
+      { quote: "Dream bigger. Do bigger.", author: "Unknown" },
+      { quote: "Push yourself, because no one else is going to do it for you.", author: "Unknown" },
+      { quote: "Great things never come from comfort zones.", author: "Unknown" },
+      { quote: "Success doesn’t just find you. You have to go out and get it.", author: "Unknown" },
+      { quote: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt" },
+      { quote: "Do what you can with all you have, wherever you are.", author: "Theodore Roosevelt" },
+      { quote: "Act as if what you do makes a difference. It does.", author: "William James" },
+      { quote: "Opportunities don't happen, you create them.", author: "Chris Grosser" }
+    ];
+
+    function showRandomQuote() {
+      const idx = Math.floor(Math.random() * quotes.length);
+      const q = quotes[idx];
+      document.getElementById('quoteText').textContent = `"${q.quote}"`;
+      document.getElementById('quoteAuthor').textContent = `— ${q.author}`;
+    }
+
+    // Show a quote by default on load
+    showRandomQuote();
+  </script>
+</body>
+</html>
