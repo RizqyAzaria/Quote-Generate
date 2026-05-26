@@ -1,133 +1,498 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Random Motivational Quotes - Neo Brutalism Style</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Quote Generator Internet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Neo Brutalism Style */
+    :root {
+      --bg: #fffdf5;
+      --ink: #111827;
+      --panel: #ffffff;
+      --accent: #ffd166;
+      --accent-2: #06d6a0;
+      --danger: #ef476f;
+      --shadow: 10px 10px 0 #111827;
+      --shadow-soft: 6px 6px 0 #111827;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
-      background: #fffcf2;
-      font-family: 'Inter', Arial, sans-serif;
-      color: #16161d;
-      min-height: 100vh;
       margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 209, 102, 0.35), transparent 22%),
+        linear-gradient(180deg, #fffdf5 0%, #fef7d5 100%);
+      color: var(--ink);
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 18px 64px;
+    }
+
+    .hero {
+      border: 4px solid var(--ink);
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: var(--accent);
+      padding: 5px 12px;
+      border: 3px solid var(--ink);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 2.5vw, 2.6rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.7;
+    }
+
+    .layout {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 1fr;
+    }
+
+    .panel {
+      border: 4px solid var(--ink);
+      border-radius: 24px;
+      background: var(--panel);
+      padding: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .field {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      gap: 8px;
+      font-weight: 700;
     }
 
-    .container {
-      margin-top: 3rem;
+    .field input,
+    .field select {
+      border: 3px solid var(--ink);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 1rem;
       background: #fff;
-      border: 4px solid #16161d;
-      box-shadow: 10px 10px 0 #ffb703;
-      padding: 3rem 2.5rem;
-      border-radius: 18px;
-      max-width: 460px;
-      text-align: center;
+      color: var(--ink);
     }
 
-    .quote {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-bottom: 2rem;
-      color: #073b4c;
-      text-shadow: 1px 1px 0 #ffd166;
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    button {
+      border: 3px solid var(--ink);
+      border-radius: 14px;
+      padding: 12px 18px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+
+    button:active {
+      transform: translate(3px, 3px);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .primary {
+      background: var(--accent-2);
+    }
+
+    .secondary {
+      background: #fff;
+    }
+
+    .danger {
+      background: #ffdbe6;
+    }
+
+    .status {
+      padding: 12px 14px;
+      border: 3px solid var(--ink);
+      border-radius: 14px;
+      margin-top: 10px;
+      font-weight: 700;
+      background: #fff8df;
+    }
+
+    .status.success { background: #e1fff1; }
+    .status.error { background: #ffe5ee; }
+
+    .quote-card {
+      border: 4px solid var(--ink);
+      border-radius: 24px;
+      background: linear-gradient(180deg, #ffffff 0%, #fff3cd 100%);
+      padding: 24px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .quote-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 8px 12px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      background: var(--accent);
+      font-size: 0.92rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    blockquote {
+      margin: 0;
+      font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+      line-height: 1.65;
+      font-weight: 700;
+    }
+
+    .quote-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      background: #fff;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
     }
 
     .author {
-      font-size: 1.1rem;
+      margin: 0;
+      font-size: 1rem;
       text-align: right;
-      color: #ef476f;
-      margin-bottom: 2rem;
       font-style: italic;
+      font-weight: 800;
+      color: #0f4c81;
     }
 
-    .btn {
-      display: inline-block;
-      padding: 1rem 2.5rem;
-      border: 3px solid #073b4c;
-      background: #06d6a0;
-      color: #16161d;
-      font-weight: bold;
-      font-size: 1.1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 5px 5px 0 #ffd166;
-      transition: all 0.13s cubic-bezier(.25,.74,.31,.87);
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .quote-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
     }
 
-    .btn:active {
-      box-shadow: 1px 1px 0 #ffd166;
-      transform: translate(4px, 4px);
-      background: #118ab2;
-      color: #fff;
+    .quote-item {
+      border: 3px solid var(--ink);
+      border-radius: 16px;
+      padding: 16px;
+      background: #fff;
     }
 
-    .heading {
-      font-size: 2.3rem;
-      font-weight: 900;
-      letter-spacing: 1px;
-      background: #ffd166;
-      color: #16161d;
-      padding: 0.4rem 2rem 0.6rem 2rem;
-      border: 4px solid #073b4c;
-      border-radius: 15px;
-      box-shadow: 6px 6px 0 #ef476f;
-      margin-bottom: 1.4rem;
-      display: inline-block;
+    .quote-item p {
+      margin: 0 0 8px;
+      line-height: 1.65;
     }
 
-    @media (max-width: 600px) {
-      .container {
-        padding: 2rem 1rem;
-        max-width: 95vw;
-      }
-      .heading {
-        font-size: 1.2rem;
-        padding: 0.25rem 0.6rem;
-      }
-      .quote { font-size: 1.1rem; }
+    .quote-item small {
+      display: block;
+      color: #374151;
+      font-weight: 700;
+    }
+
+    .note {
+      margin-top: 12px;
+      font-size: 0.97rem;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 20px 14px 48px; }
+      .hero, .panel, .quote-card { padding: 18px; }
+      .button-row { flex-direction: column; }
+      button { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <h1 class="heading">Motivational Quotes</h1>
-  <div class="container">
-    <div class="quote" id="quoteText"></div>
-    <div class="author" id="quoteAuthor"></div>
-    <button class="btn" onclick="showRandomQuote()">New Quote</button>
-  </div>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">Live Quote Generator</div>
+      <h1>Ambil quote dari internet dan sesuaikan dengan kebutuhan pengguna</h1>
+      <p>
+        Website ini sekarang mengambil quote secara langsung dari API publik, memungkinkan Anda memilih topik, kata kunci, dan jumlah hasil yang ingin ditampilkan.
+        Jika koneksi internet tidak tersedia, halaman tetap memiliki fallback quote lokal.
+      </p>
+    </section>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="controls">
+          <label class="field">
+            Tujuan Quote
+            <select id="needSelect">
+              <option value="all">Semua topik</option>
+              <option value="motivation">Motivasi</option>
+              <option value="success">Sukses</option>
+              <option value="life">Kehidupan</option>
+              <option value="wisdom">Kebijaksanaan</option>
+              <option value="work">Kerja & Produktivitas</option>
+              <option value="confidence">Percaya Diri</option>
+              <option value="peace">Ketenangan</option>
+            </select>
+          </label>
+
+          <label class="field">
+            Kata Kunci
+            <input id="keywordInput" type="text" placeholder="contoh: fokus, belajar, keluarga" maxlength="50">
+          </label>
+
+          <label class="field">
+            Jumlah Quote
+            <select id="limitSelect">
+              <option value="1">1</option>
+              <option value="3">3</option>
+              <option value="5">5</option>
+              <option value="8">8</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="button-row">
+          <button id="fetchBtn" class="primary">Ambil Quote</button>
+          <button id="loadMoreBtn" class="secondary">Tambah Lebih Banyak</button>
+          <button id="resetBtn" class="danger">Reset</button>
+        </div>
+
+        <div id="status" class="status">Siap mengambil quote terbaru dari internet.</div>
+
+        <p class="note">
+          <strong>Tips:</strong> isi kata kunci untuk mendapatkan quote yang lebih spesifik, atau pilih tujuan agar hasil lebih relevan dengan kebutuhan Anda.
+        </p>
+      </section>
+
+      <section class="panel quote-card" aria-live="polite">
+        <div>
+          <div class="quote-badge" id="sourceBadge">Live from internet</div>
+          <blockquote id="quoteText">Memuat quote terbaru...</blockquote>
+        </div>
+        <div>
+          <p class="author" id="quoteAuthor">-</p>
+          <div id="quoteMeta" class="quote-meta"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Hasil Quote</h2>
+        <div id="quoteList" class="quote-list"></div>
+      </section>
+    </div>
+  </main>
+
   <script>
-    // Array of motivational quotes
-    const quotes = [
-      { quote: "The best way to get started is to quit talking and begin doing.", author: "Walt Disney" },
-      { quote: "Don’t let yesterday take up too much of today.", author: "Will Rogers" },
-      { quote: "It’s not whether you get knocked down, it’s whether you get up.", author: "Vince Lombardi" },
-      { quote: "The harder you work for something, the greater you’ll feel when you achieve it.", author: "Unknown" },
-      { quote: "Dream bigger. Do bigger.", author: "Unknown" },
-      { quote: "Push yourself, because no one else is going to do it for you.", author: "Unknown" },
-      { quote: "Great things never come from comfort zones.", author: "Unknown" },
-      { quote: "Success doesn’t just find you. You have to go out and get it.", author: "Unknown" },
-      { quote: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt" },
-      { quote: "Do what you can with all you have, wherever you are.", author: "Theodore Roosevelt" },
-      { quote: "Act as if what you do makes a difference. It does.", author: "William James" },
-      { quote: "Opportunities don't happen, you create them.", author: "Chris Grosser" }
+    const fallbackQuotes = [
+      { content: "The best way to get started is to quit talking and begin doing.", author: "Walt Disney", tags: ["motivasi", "aksi"] },
+      { content: "Don’t let yesterday take up too much of today.", author: "Will Rogers", tags: ["hidup", "motivasi"] },
+      { content: "It’s not whether you get knocked down, it’s whether you get up.", author: "Vince Lombardi", tags: ["ketekunan", "sukses"] },
+      { content: "Great things never come from comfort zones.", author: "Unknown", tags: ["pertumbuhan", "motivasi"] },
+      { content: "Success doesn’t just find you. You have to go out and get it.", author: "Unknown", tags: ["sukses", "kerja"] }
     ];
 
-    function showRandomQuote() {
-      const idx = Math.floor(Math.random() * quotes.length);
-      const q = quotes[idx];
-      document.getElementById('quoteText').textContent = `"${q.quote}"`;
-      document.getElementById('quoteAuthor').textContent = `— ${q.author}`;
+    const needTerms = {
+      all: [],
+      motivation: ["motiv", "inspir", "success", "dream", "keep going", "believe"],
+      success: ["success", "achievement", "grow", "goal", "work", "career", "ambition"],
+      life: ["life", "happiness", "choose", "change", "future", "time"],
+      wisdom: ["wisdom", "learn", "knowledge", "philosophy", "mind", "thought"],
+      work: ["work", "productivity", "effort", "focus", "discipline", "habit"],
+      confidence: ["confidence", "courage", "believe", "self", "brave", "fear"],
+      peace: ["peace", "calm", "mindfulness", "rest", "balance", "serenity"]
+    };
+
+    const sourceBadge = document.getElementById('sourceBadge');
+    const quoteText = document.getElementById('quoteText');
+    const quoteAuthor = document.getElementById('quoteAuthor');
+    const quoteMeta = document.getElementById('quoteMeta');
+    const status = document.getElementById('status');
+    const quoteList = document.getElementById('quoteList');
+
+    const needSelect = document.getElementById('needSelect');
+    const keywordInput = document.getElementById('keywordInput');
+    const limitSelect = document.getElementById('limitSelect');
+
+    let allQuotes = [];
+
+    function setStatus(message, type = 'info') {
+      status.textContent = message;
+      status.className = `status ${type}`;
     }
 
-    // Show a quote by default on load
-    showRandomQuote();
+    function fallbackQuote() {
+      return fallbackQuotes[Math.floor(Math.random() * fallbackQuotes.length)];
+    }
+
+    function displayFallbackQuote() {
+      const fallback = fallbackQuote();
+      sourceBadge.textContent = 'Fallback local quote';
+      quoteText.textContent = `“${fallback.content}”`;
+      quoteAuthor.textContent = `— ${fallback.author}`;
+      quoteMeta.innerHTML = fallback.tags.map(tag => `<span class="chip">${tag}</span>`).join('');
+      setStatus('Gagal mengambil data internet. Menampilkan quote cadangan lokal.', 'error');
+    }
+
+    function normalizeQuote(item) {
+      const content = item.q || item.content || item.quote || 'Quote tidak tersedia';
+      const author = item.a || item.author || 'Unknown';
+      return {
+        content,
+        author,
+        tags: ["internet"]
+      };
+    }
+
+    function matchesFilters(quote, need, keywordTerms) {
+      const haystack = `${quote.content} ${quote.author}`.toLowerCase();
+
+      const needMatches = needTerms[need].length
+        ? needTerms[need].some(term => haystack.includes(term.toLowerCase()))
+        : true;
+
+      const keywordMatches = keywordTerms.length
+        ? keywordTerms.some(term => haystack.includes(term.toLowerCase()))
+        : true;
+
+      return needMatches && keywordMatches;
+    }
+
+    function renderCurrentQuote(quote) {
+      sourceBadge.textContent = 'Live from internet';
+      quoteText.textContent = `“${quote.content}”`;
+      quoteAuthor.textContent = `— ${quote.author}`;
+      quoteMeta.innerHTML = quote.tags.map(tag => `<span class="chip">${tag}</span>`).join('');
+    }
+
+    function renderQuoteList() {
+      if (!allQuotes.length) {
+        quoteList.innerHTML = '<p>Belum ada quote yang ditampilkan.</p>';
+        return;
+      }
+
+      quoteList.innerHTML = allQuotes.map((quote) => `
+        <article class="quote-item">
+          <p>“${quote.content}”</p>
+          <small>${quote.author}</small>
+          <div class="quote-meta">
+            ${quote.tags.map(tag => `<span class="chip">${tag}</span>`).join('')}
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function uniqueQuotes(quotes) {
+      const seen = new Set();
+      return quotes.filter((quote) => {
+        const key = `${quote.author}::${quote.content}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+
+    async function fetchInternetQuotes(limit = 1, append = false) {
+      const need = needSelect.value;
+      const keyword = keywordInput.value.trim();
+      const keywordTerms = keyword
+        ? keyword.split(/\s+/).filter(Boolean)
+        : [];
+
+      try {
+        const response = await fetch('https://zenquotes.io/api/quotes', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Network error');
+
+        const data = await response.json();
+        const normalized = (Array.isArray(data) ? data : []).map(normalizeQuote);
+
+        if (!normalized.length) {
+          throw new Error('No data received');
+        }
+
+        const filtered = normalized.filter((quote) => matchesFilters(quote, need, keywordTerms));
+        const matching = filtered.length ? filtered : normalized;
+        const selected = matching.slice(0, limit);
+
+        if (!selected.length) {
+          throw new Error('Tidak ada quote sesuai filter');
+        }
+
+        const nextQuotes = uniqueQuotes(append ? [...allQuotes, ...selected] : selected);
+        allQuotes = nextQuotes;
+
+        renderCurrentQuote(selected[0]);
+        renderQuoteList();
+
+        const detail = keyword
+          ? `kata kunci “${keyword}”`
+          : `tujuan “${needSelect.options[needSelect.selectedIndex].text}”`;
+
+        setStatus(`Menampilkan ${selected.length} quote dari internet sesuai ${detail}.`, 'success');
+      } catch (error) {
+        displayFallbackQuote();
+      }
+    }
+
+    function resetPage() {
+      allQuotes = [];
+      keywordInput.value = '';
+      needSelect.value = 'all';
+      limitSelect.value = '1';
+      quoteList.innerHTML = '<p>Belum ada quote yang ditampilkan.</p>';
+      setStatus('Siap mengambil quote terbaru dari internet.');
+      fetchInternetQuotes(1, false);
+    }
+
+    document.getElementById('fetchBtn').addEventListener('click', () => {
+      fetchInternetQuotes(Number(limitSelect.value), false);
+    });
+
+    document.getElementById('loadMoreBtn').addEventListener('click', () => {
+      fetchInternetQuotes(Number(limitSelect.value), true);
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', resetPage);
+
+    fetchInternetQuotes(1, false);
   </script>
 </body>
 </html>
